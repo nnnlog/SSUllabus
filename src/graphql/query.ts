@@ -23,6 +23,7 @@ export default (db: Database): RootResolver => (ctx?: Context) => {
 
             subjectQueryInfos.push(buildStringIncluded(["subject.code", "subject.name", "subject.professor"], a.keyword)); // not exact search
 
+            subjectQueryInfos.push(buildString("subject.code", a.code));
             subjectQueryInfos.push(buildString("subject.bunban", a.bunban));
             subjectQueryInfos.push(buildString("subject.open_department", a.open_department));
 

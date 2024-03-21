@@ -6,11 +6,10 @@ import {Database, OPEN_READONLY, verbose} from "sqlite3";
 import schema from "./graphql/schema";
 import query from "./graphql/query";
 import {serveStatic} from "@hono/node-server/serve-static";
-import * as path from "node:path";
 
 import "dotenv/config";
 
-const db = new (verbose().Database)(`${__dirname}/../subjects.db`, OPEN_READONLY , () => {});
+const db = new (Database)(`${__dirname}/../subjects.db`, OPEN_READONLY , () => {});
 
 const app = new Hono();
 

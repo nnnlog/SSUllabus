@@ -53,6 +53,7 @@ interface SubjectQuery {
 
     keyword: string[] | undefined,
 
+    code: string[] | undefined,
     bunban: string[] | undefined,
     open_department: string[] | undefined,
 

@@ -12,10 +12,10 @@ type Query {
         limited_target: Boolean,
 
         keyword: [String!],
-        #        code: [String!],
+
+        code: [String!],
         #        name: [String!],
         #        professor: [String!],
-
         bunban: [String!],
         open_department: [String!],
 
