@@ -1,13 +1,18 @@
 {
   "compilerOptions": {
-    "target": "ESNext",
-    "module": "ESNext",
-    "moduleResolution": "Bundler",
+    "target": "ES6",
+    "module": "commonjs",
+    "esModuleInterop": true,
     "strict": true,
     "types": [
       "node"
     ],
     "jsx": "react-jsx",
     "jsxImportSource": "hono/jsx",
-  }
+    "outDir": "./dist/"
+  },
+  "include": [
+    "src/",
+    "src/*/*.graphql",
+  ],
 }

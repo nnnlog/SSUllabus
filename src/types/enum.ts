@@ -1,20 +1,20 @@
 enum Semester {
-    first = "1학기",
-    summer = "여름학기",
-    second = "2학기",
-    winter = "겨울학기"
+    FIRST = "1학기",
+    SUMMER = "여름학기",
+    SECOND = "2학기",
+    WINTER = "겨울학기"
 }
 
 enum GradeScale {
     SCORE = "점수 100기준 입력",
     PF = "Pass/Fail 입력",
-    unknown = ""
+    UNKNOWN = ""
 }
 
 enum GradeRule {
     RELATIVE = "상대평가",
     ABSOLUTE = "절대평가",
-    unknown = ""
+    UNKNOWN = ""
 }
 
 enum Language {
@@ -23,14 +23,14 @@ enum Language {
     MIXED_ENGLISH_KOREAN = "영어-한국어혼합",
     NATION = "원어",
     MIXED_NATION_KOREAN = "원어-한국어혼합",
-    unknown = ""
+    UNKNOWN = ""
 }
 
 enum SubjectProcess {
-    haksa = "학사과정",
-    suksa = "석사과정",
-    sukbak = "석박과정",
-    unknown = ""
+    HAKSA = "학사과정",
+    SUKSA = "석사과정",
+    SUKBAK = "석박과정",
+    UNKNOWN = ""
 }
 
 export default {Semester, GradeScale, GradeRule, Language, SubjectProcess};

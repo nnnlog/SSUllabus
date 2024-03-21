@@ -2,7 +2,7 @@ import {Database} from "sqlite3";
 import {RootResolver} from "@hono/graphql-server";
 import {Context} from "hono";
 import {SubjectDB} from "../types/db";
-import {SubjectQuery} from "../types/graphql";
+import {MajorListQuery, SubjectQuery} from "../types/graphql";
 
 import {buildBoolean, buildInt, buildIntRange, buildQuery, buildString, buildStringIncluded} from "./buildQuery";
 
@@ -72,7 +72,7 @@ export default (db: Database): RootResolver => (ctx?: Context) => {
                     });
             });
         },
-        major_lists: async (a: SubjectQuery) => {
+        major_lists: async (a: MajorListQuery) => {
             let queryInfos: ([string, any[]])[] = [];
 
             queryInfos.push(["(subject_major.year == (?))", [a.year]]);
@@ -91,7 +91,7 @@ export default (db: Database): RootResolver => (ctx?: Context) => {
                     });
             });
         },
-        multi_major_lists: async (a: SubjectQuery) => {
+        multi_major_lists: async (a: MajorListQuery) => {
             let queryInfos: ([string, any[]])[] = [];
 
             queryInfos.push(["(subject_multi_major.year == (?))", [a.year]]);

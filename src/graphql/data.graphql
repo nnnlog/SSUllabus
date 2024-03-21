@@ -90,22 +90,22 @@ type MultiMajor {
 }
 
 enum Semester {
-    first,
-    summer,
-    second,
-    winter
+    FIRST,
+    SUMMER,
+    SECOND,
+    WINTER
 }
 
 enum GradeScale {
     SCORE,
     PF,
-    unknown
+    UNKNOWN
 }
 
 enum GradeRule {
     RELATIVE,
     ABSOLUTE,
-    unknown
+    UNKNOWN
 }
 
 enum Language {
@@ -114,12 +114,12 @@ enum Language {
     MIXED_ENGLISH_KOREAN,
     NATION,
     MIXED_NATION_KOREAN,
-    unknown
+    UNKNOWN
 }
 
 enum SubjectProcess {
-    haksa,
-    suksa,
-    sukbak,
-    unknown
+    HAKSA,
+    SUKSA,
+    SUKBAK,
+    UNKNOWN
 }

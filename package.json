@@ -1,6 +1,7 @@
 {
   "scripts": {
-    "dev": "tsx watch src/index.ts"
+    "dev": "tsx watch src/index.ts",
+    "build": "cd static && npm run build && cd .. && tsc && copyfiles static/dist dist/ -r && cd src && copyfiles ./**/*.graphql ../dist/ && cd .."
   },
   "dependencies": {
     "@graphql-tools/schema": "^10.0.3",
@@ -13,6 +14,8 @@
   },
   "devDependencies": {
     "@types/node": "^20.11.17",
-    "tsx": "^3.12.2"
+    "tsx": "^3.12.2",
+    "typescript": "^5.4.3",
+    "copyfiles": "^2.4.1"
   }
 }
