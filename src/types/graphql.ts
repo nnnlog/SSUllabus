@@ -40,32 +40,34 @@
 //     })[],
 // }
 
+import {GradeRuleKey, GradeScaleKey, LanguageKey, SemesterKey, SubjectProcessKey} from "./enum";
+
 interface SubjectQuery {
     year: number,
-    semester: "FIRST" | "SUMMER" | "SECOND" | "WINTER",
+    semester: SemesterKey,
 
-    grade_scale: ("SCORE" | "PF" | "UNKNOWN")[] | undefined,
-    grade_rule: ("RELATIVE" | "ABSOLUTE" | "UNKNOWN")[] | undefined,
-    lang: ("KOREAN" | "ENGLISH" | "MIXED_ENGLISH_KOREAN" | "NATION" | "MIXED_NATION_KOREAN" | "UNKNOWN")[] | undefined,
+    grade_scale?: GradeScaleKey[],
+    grade_rule?: GradeRuleKey[],
+    lang?: LanguageKey[],
 
-    is_el: boolean | undefined,
-    limited_target: boolean | undefined,
+    is_el?: boolean,
+    limited_target?: boolean,
 
-    keyword: string[] | undefined,
+    keyword?: string[],
 
-    code: string[] | undefined,
-    bunban: string[] | undefined,
-    open_department: string[] | undefined,
+    code?: string[],
+    bunban?: string[],
+    open_department?: string[],
 
-    credit: number[] | undefined,
-    listen_count: ({ min: number, max: number })[] | undefined,
-    remain_count: ({ min: number, max: number })[] | undefined,
+    credit?: number[] | undefined,
+    listen_count?: ({ min: number, max: number })[],
+    remain_count?: ({ min: number, max: number })[],
 
-    process: ("HAKSA" | "SUKSA" | "SUKBAK" | "UNKNOWN")[] | undefined,
-    target: string[] | undefined,
+    process?: SubjectProcessKey[],
+    target?: string[],
 
-    majors: string[] | undefined,
-    multi_majors: string[] | undefined,
+    majors?: string[],
+    multi_majors?: string[],
 }
 
 interface MajorListQuery {
