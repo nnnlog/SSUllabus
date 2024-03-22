@@ -75,11 +75,19 @@ type Subject {
 
     majors: [String!]!,
     multi_majors: [String!]!,
+    time_place: [TimePlaceDB_Subject!]
 }
 
 type SubjectMajor {
     isu_name: String,
     is_main: Boolean!
+}
+
+type TimePlaceDB_Subject {
+    place: String,
+    day: String,
+    time_start: String,
+    time_end: String,
 }
 
 type MultiMajor {

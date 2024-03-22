@@ -1,7 +1,7 @@
 import {Database} from "sqlite3";
 import {RootResolver} from "@hono/graphql-server";
 import {Context} from "hono";
-import {SubjectDB} from "../types/db";
+import {SubjectDB, TimePlaceDB_Subject} from "../types/db";
 import {MajorListQuery, SubjectQuery} from "../types/graphql";
 
 import {buildBoolean, buildInt, buildIntRange, buildQuery, buildString, buildStringIncluded} from "./buildQuery";
@@ -49,15 +49,28 @@ export default (db: Database): RootResolver => (ctx?: Context) => {
 
             return await new Promise(r => {
                 db.all(`
-                            select subject.*, json_group_array(distinct subject_multi_major.isu_name) as multi_majors_raw, json_group_array(distinct subject_major.isu_name) as majors_raw
+                            select subject.*,
+                                   json_group_array(distinct (subject_multi_major.isu_name)) as multi_majors_raw,
+                                   json_group_array(distinct (subject_major.isu_name))       as majors_raw,
+                                   json_group_array(distinct (json_object(
+                                           'place',
+                                           time_place.place,
+                                           'day',
+                                           time_place.day,
+                                           'time_start',
+                                           time_place.time_start,
+                                           'time_end',
+                                           time_place.time_end
+                                   )))   as time_place_raw
                             from subject
                                      left join subject_multi_major on subject.year = subject_multi_major.year and subject.semester = subject_multi_major.semester and subject.code = subject_multi_major.code
                                      left join subject_major on subject.year = subject_major.year and subject.semester = subject_major.semester and subject.code = subject_major.code
+                                     left join time_place on subject.year = time_place.year and subject.semester = time_place.semester and subject.code = time_place.code
                             where ${buildQuery(subjectQueryInfos)}
                               and ${a.multi_majors ? `(subject.code in (select subject_multi_major.code
                                                     from subject_multi_major
                                                     where ${buildQuery(multiMajorQueryInfos)}))` : "TRUE"}
-                              and ${a.majors ? ` (subject.code in (select subject_major.code
+                              and ${a.majors ? `(subject.code in (select subject_major.code
                                                     from subject_major
                                                     where ${buildQuery(majorQueryInfos)}))` : "TRUE"}
                             group by subject.year, subject.semester, subject.code
@@ -68,7 +81,9 @@ export default (db: Database): RootResolver => (ctx?: Context) => {
                         for (let obj of row) {
                             obj.majors = (JSON.parse(obj.majors_raw) as (string | null)[]).filter(a => a !== null) as string[];
                             obj.multi_majors = (JSON.parse(obj.multi_majors_raw) as (string | null)[]).filter(a => a !== null) as string[];
+                            obj.time_place = (JSON.parse(obj.time_place_raw) as (TimePlaceDB_Subject)[]).filter(a => a.place !== null) as TimePlaceDB_Subject[]; // raw field can be nullable.
                         }
+
                         r(row);
                     });
             });

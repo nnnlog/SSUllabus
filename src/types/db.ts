@@ -23,9 +23,18 @@ interface SubjectDB {
 
     majors: string[],
     multi_majors: string[],
+    time_place: TimePlaceDB_Subject[],
 
     majors_raw: string,
     multi_majors_raw: string,
+    time_place_raw: string,
+}
+
+interface TimePlaceDB_Subject {
+    place: string,
+    day: string,
+    time_start: string,
+    time_end: string,
 }
 
 interface TimePlaceDB {
@@ -51,4 +60,4 @@ interface SubjectMultiMajorDB {
     isu_name: string
 }
 
-export type {SubjectDB, TimePlaceDB, SubjectMajorDB, SubjectMultiMajorDB};
+export type {SubjectDB, TimePlaceDB, SubjectMajorDB, SubjectMultiMajorDB, TimePlaceDB_Subject};
