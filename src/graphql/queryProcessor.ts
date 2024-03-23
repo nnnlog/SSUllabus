@@ -1,8 +1,8 @@
 import {Database} from "sqlite3";
 import {RootResolver} from "@hono/graphql-server";
 import {Context} from "hono";
-import {SubjectDB, TimePlaceDB_Subject} from "../../../ssullabus-type/db";
-import {QueryMajor_ListsArgs, QueryMulti_Major_ListsArgs, QuerySubjectArgs} from "../../../ssullabus-type/graphql";
+import {SubjectDB, TimePlaceDB_Subject} from "../types/db";
+import {QueryMajor_ListsArgs, QueryMulti_Major_ListsArgs, QuerySubjectArgs} from "../types/graphql";
 
 import {buildBoolean, buildInt, buildIntRange, buildQuery, buildString, buildStringIncluded} from "./buildQuery";
 
