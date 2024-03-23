@@ -1,7 +1,7 @@
 import {Database} from "sqlite3";
 import {RootResolver} from "@hono/graphql-server";
 import {Context} from "hono";
-import {SubjectDB, TimePlaceDB_Subject} from "../types/db";
+import {CreditDB, SubjectDB, SubjectMajorDB, SubjectMultiMajorDB, TimePlaceDB_Subject} from "../types/db";
 import {QueryCreditsArgs, QueryMajor_ListsArgs, QueryMulti_Major_ListsArgs, QuerySubjectArgs} from "../types/graphql";
 
 import {buildBoolean, buildInt, buildIntRange, buildQuery, buildString, buildStringIncluded} from "./buildQuery";
@@ -103,7 +103,7 @@ export default (db: Database): RootResolver => (ctx?: Context) => {
                             order by subject_major.isu_name;
                     `,
                     ([queryInfos].map<any[][]>(a => a.map(b => b[1]).flat())).flat(),
-                    (err, row: SubjectDB[]) => {
+                    (err, row: SubjectMajorDB[]) => {
                         r(row);
                     });
             });
@@ -122,7 +122,7 @@ export default (db: Database): RootResolver => (ctx?: Context) => {
                             order by subject_multi_major.univ, subject_multi_major.department, subject_multi_major.detail_department, subject_multi_major.isu_name;
                     `,
                     ([queryInfos].map<any[][]>(a => a.map(b => b[1]).flat())).flat(),
-                    (err, row: SubjectDB[]) => {
+                    (err, row: SubjectMultiMajorDB[]) => {
                         r(row);
                     });
             });
@@ -141,8 +141,8 @@ export default (db: Database): RootResolver => (ctx?: Context) => {
                             order by subject.credit;
                     `,
                     ([queryInfos].map<any[][]>(a => a.map(b => b[1]).flat())).flat(),
-                    (err, row: SubjectDB[]) => {
-                        r(row);
+                    (err, row: CreditDB[]) => {
+                        r(row.map(({credit}) => credit));
                     });
             });
         },

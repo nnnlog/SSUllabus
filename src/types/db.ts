@@ -62,4 +62,8 @@ interface SubjectMultiMajorDB {
     isu_name: string
 }
 
-export type {SubjectDB, TimePlaceDB, SubjectMajorDB, SubjectMultiMajorDB, TimePlaceDB_Subject};
+interface CreditDB {
+    credit: number,
+}
+
+export type {SubjectDB, TimePlaceDB, SubjectMajorDB, SubjectMultiMajorDB, TimePlaceDB_Subject, CreditDB};
