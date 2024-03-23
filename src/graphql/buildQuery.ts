@@ -1,4 +1,4 @@
-import {InputMaybe, IntSectionQuery} from "../../../ssullabus-type/graphql";
+import {InputMaybe, IntSectionQuery} from "../types/graphql";
 
 export const buildQuery = (queryInfos: ([string, any[]])[]) => {
     return "(" + queryInfos.map(a => a[0]).join(" AND ") + ")";
