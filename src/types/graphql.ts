@@ -52,9 +52,16 @@ export type MultiMajor = {
 
 export type Query = {
   __typename?: 'Query';
+  credits: Array<Scalars['Float']['output']>;
   major_lists: Array<SubjectMajor>;
   multi_major_lists: Array<MultiMajor>;
   subject: Array<Subject>;
+};
+
+
+export type QueryCreditsArgs = {
+  semester: Semester;
+  year: Scalars['Int']['input'];
 };
 
 
@@ -255,6 +262,7 @@ export type MultiMajorResolvers<ContextType = any, ParentType extends ResolversP
 };
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
+  credits?: Resolver<Array<ResolversTypes['Float']>, ParentType, ContextType, RequireFields<QueryCreditsArgs, 'semester' | 'year'>>;
   major_lists?: Resolver<Array<ResolversTypes['SubjectMajor']>, ParentType, ContextType, RequireFields<QueryMajor_ListsArgs, 'semester' | 'year'>>;
   multi_major_lists?: Resolver<Array<ResolversTypes['MultiMajor']>, ParentType, ContextType, RequireFields<QueryMulti_Major_ListsArgs, 'semester' | 'year'>>;
   subject?: Resolver<Array<ResolversTypes['Subject']>, ParentType, ContextType, RequireFields<QuerySubjectArgs, 'semester' | 'year'>>;
