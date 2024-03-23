@@ -127,5 +127,24 @@ export default (db: Database): RootResolver => (ctx?: Context) => {
                     });
             });
         },
+        credits: async (a: QueryMulti_Major_ListsArgs) => {
+            let queryInfos: ([string, any[]])[] = [];
+
+            queryInfos.push(["(subject.year == (?))", [a.year]]);
+            queryInfos.push(["(subject.semester == (?))", [a.semester]]);
+
+            return await new Promise(r => {
+                db.all(`
+                            select distinct subject.credit
+                            from subject
+                            where ${buildQuery(queryInfos)}
+                            order by subject.credit;
+                    `,
+                    ([queryInfos].map<any[][]>(a => a.map(b => b[1]).flat())).flat(),
+                    (err, row: SubjectDB[]) => {
+                        r(row);
+                    });
+            });
+        },
     };
 };
