@@ -6,7 +6,7 @@ import { graphqlServer } from '@hono/graphql-server';
 import {Database, OPEN_READONLY, verbose} from "sqlite3";
 
 import schema from "./graphql/schema";
-import query from "./graphql/query";
+import query from "./graphql/queryProcessor";
 import {serveStatic} from "@hono/node-server/serve-static";
 
 import "dotenv/config";

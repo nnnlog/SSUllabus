@@ -1,3 +1,6 @@
 [submodule "static"]
 	path = static
 	url = https://github.com/nnnlog/SSUllabus-web
+[submodule "src/types/common"]
+	path = src/types/common
+	url = https://github.com/nnnlog/SSUllabus-type

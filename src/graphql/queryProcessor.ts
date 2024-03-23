@@ -1,14 +1,14 @@
 import {Database} from "sqlite3";
 import {RootResolver} from "@hono/graphql-server";
 import {Context} from "hono";
-import {SubjectDB, TimePlaceDB_Subject} from "../types/db";
-import {MajorListQuery, SubjectQuery} from "../types/graphql";
+import {SubjectDB, TimePlaceDB_Subject} from "../../../ssullabus-type/db";
+import {QueryMajor_ListsArgs, QueryMulti_Major_ListsArgs, QuerySubjectArgs} from "../../../ssullabus-type/graphql";
 
 import {buildBoolean, buildInt, buildIntRange, buildQuery, buildString, buildStringIncluded} from "./buildQuery";
 
 export default (db: Database): RootResolver => (ctx?: Context) => {
     return {
-        subject: async (a: SubjectQuery) => {
+        subject: async (a: QuerySubjectArgs) => {
             let subjectQueryInfos: ([string, any[]])[] = [];
 
             subjectQueryInfos.push(["(subject.year == (?))", [a.year]]);
@@ -24,6 +24,7 @@ export default (db: Database): RootResolver => (ctx?: Context) => {
             subjectQueryInfos.push(buildStringIncluded(["subject.code", "subject.name", "subject.professor"], a.keyword)); // not exact search
 
             subjectQueryInfos.push(buildString("subject.code", a.code));
+
             subjectQueryInfos.push(buildString("subject.bunban", a.bunban));
             subjectQueryInfos.push(buildString("subject.open_department", a.open_department));
 
@@ -88,7 +89,7 @@ export default (db: Database): RootResolver => (ctx?: Context) => {
                     });
             });
         },
-        major_lists: async (a: MajorListQuery) => {
+        major_lists: async (a: QueryMajor_ListsArgs) => {
             let queryInfos: ([string, any[]])[] = [];
 
             queryInfos.push(["(subject_major.year == (?))", [a.year]]);
@@ -107,7 +108,7 @@ export default (db: Database): RootResolver => (ctx?: Context) => {
                     });
             });
         },
-        multi_major_lists: async (a: MajorListQuery) => {
+        multi_major_lists: async (a: QueryMulti_Major_ListsArgs) => {
             let queryInfos: ([string, any[]])[] = [];
 
             queryInfos.push(["(subject_multi_major.year == (?))", [a.year]]);
