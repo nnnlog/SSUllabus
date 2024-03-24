@@ -187,6 +187,7 @@ export default (db: Database): RootResolver => (ctx?: Context) => {
                             select distinct time_place.place
                             from time_place
                             where ${buildQuery(queryInfos)}
+                              and time_place.place IS NOT NULL
                             order by time_place.place;
                     `,
                     ([queryInfos].map<any[][]>(a => a.map(b => b[1]).flat())).flat(),
