@@ -68,6 +68,7 @@ export type Query = {
   __typename?: 'Query';
   credits: Array<Scalars['Float']['output']>;
   lecture_room_timetable: Array<LectureRoomTimeTableGroup>;
+  lecture_rooms: Array<Scalars['String']['output']>;
   major_lists: Array<SubjectMajor>;
   multi_major_lists: Array<MultiMajor>;
   subject: Array<Subject>;
@@ -82,6 +83,12 @@ export type QueryCreditsArgs = {
 
 export type QueryLecture_Room_TimetableArgs = {
   place: Array<Scalars['String']['input']>;
+  semester: Semester;
+  year: Scalars['Int']['input'];
+};
+
+
+export type QueryLecture_RoomsArgs = {
   semester: Semester;
   year: Scalars['Int']['input'];
 };
@@ -304,6 +311,7 @@ export type MultiMajorResolvers<ContextType = any, ParentType extends ResolversP
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   credits?: Resolver<Array<ResolversTypes['Float']>, ParentType, ContextType, RequireFields<QueryCreditsArgs, 'semester' | 'year'>>;
   lecture_room_timetable?: Resolver<Array<ResolversTypes['LectureRoomTimeTableGroup']>, ParentType, ContextType, RequireFields<QueryLecture_Room_TimetableArgs, 'place' | 'semester' | 'year'>>;
+  lecture_rooms?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType, RequireFields<QueryLecture_RoomsArgs, 'semester' | 'year'>>;
   major_lists?: Resolver<Array<ResolversTypes['SubjectMajor']>, ParentType, ContextType, RequireFields<QueryMajor_ListsArgs, 'semester' | 'year'>>;
   multi_major_lists?: Resolver<Array<ResolversTypes['MultiMajor']>, ParentType, ContextType, RequireFields<QueryMulti_Major_ListsArgs, 'semester' | 'year'>>;
   subject?: Resolver<Array<ResolversTypes['Subject']>, ParentType, ContextType, RequireFields<QuerySubjectArgs, 'semester' | 'year'>>;

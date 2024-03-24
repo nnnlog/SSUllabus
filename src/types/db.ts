@@ -67,4 +67,8 @@ interface CreditDB {
     credit: number,
 }
 
-export type {SubjectDB, LectureRoomTimeTableDB, SubjectMajorDB, SubjectMultiMajorDB, SubjectLectureRoomTimeDB, CreditDB};
+interface LectureRoomDB {
+    place: string;
+}
+
+export type {SubjectDB, LectureRoomTimeTableDB, SubjectMajorDB, SubjectMultiMajorDB, SubjectLectureRoomTimeDB, CreditDB, LectureRoomDB};

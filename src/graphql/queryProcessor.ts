@@ -1,8 +1,8 @@
 import {Database} from "sqlite3";
 import {RootResolver} from "@hono/graphql-server";
 import {Context} from "hono";
-import {CreditDB, SubjectDB, SubjectMajorDB, SubjectMultiMajorDB, LectureRoomTimeTableDB, SubjectLectureRoomTimeDB} from "../types/db";
-import {QueryCreditsArgs, QueryLecture_Room_TimetableArgs, QueryMajor_ListsArgs, QueryMulti_Major_ListsArgs, QuerySubjectArgs} from "../types/graphql";
+import {CreditDB, LectureRoomDB, LectureRoomTimeTableDB, SubjectDB, SubjectLectureRoomTimeDB, SubjectMajorDB, SubjectMultiMajorDB} from "../types/db";
+import {QueryCreditsArgs, QueryLecture_Room_TimetableArgs, QueryLecture_RoomsArgs, QueryMajor_ListsArgs, QueryMulti_Major_ListsArgs, QuerySubjectArgs} from "../types/graphql";
 
 import {buildBoolean, buildInt, buildIntRange, buildQuery, buildString, buildStringIncluded} from "./buildQuery";
 
@@ -62,7 +62,7 @@ export default (db: Database): RootResolver => (ctx?: Context) => {
                                            time_place.time_start,
                                            'time_end',
                                            time_place.time_end
-                                   )))   as time_place_raw
+                                                              )))                            as time_place_raw
                             from subject
                                      left join subject_multi_major on subject.year = subject_multi_major.year and subject.semester = subject_multi_major.semester and subject.code = subject_multi_major.code
                                      left join subject_major on subject.year = subject_major.year and subject.semester = subject_major.semester and subject.code = subject_major.code
@@ -155,15 +155,16 @@ export default (db: Database): RootResolver => (ctx?: Context) => {
 
             return await new Promise(r => {
                 db.all(`
-                            select time_place.place, json_group_array(json_object(
-                                    'code',
-                                    time_place.code,
-                                    'day',
-                                    time_place.day,
-                                    'time_start',
-                                    time_place.time_start,
-                                    'time_end',
-                                    time_place.time_end
+                            select time_place.place,
+                                   json_group_array(json_object(
+                                           'code',
+                                           time_place.code,
+                                           'day',
+                                           time_place.day,
+                                           'time_start',
+                                           time_place.time_start,
+                                           'time_end',
+                                           time_place.time_end
                                                     )) as value_raw
                             from time_place
                             where ${buildQuery(queryInfos)}
@@ -172,6 +173,25 @@ export default (db: Database): RootResolver => (ctx?: Context) => {
                     ([queryInfos].map<any[][]>(a => a.map(b => b[1]).flat())).flat(),
                     (err, row: LectureRoomTimeTableDB[]) => {
                         r(row.map(a => ({...a, value: JSON.parse(a.value_raw)})));
+                    });
+            });
+        },
+        lecture_rooms: async (a: QueryLecture_RoomsArgs) => {
+            let queryInfos: ([string, any[]])[] = [];
+
+            queryInfos.push(["(time_place.year == (?))", [a.year]]);
+            queryInfos.push(["(time_place.semester == (?))", [a.semester]]);
+
+            return await new Promise(r => {
+                db.all(`
+                            select distinct time_place.place
+                            from time_place
+                            where ${buildQuery(queryInfos)}
+                            order by time_place.place;
+                    `,
+                    ([queryInfos].map<any[][]>(a => a.map(b => b[1]).flat())).flat(),
+                    (err, row: LectureRoomDB[]) => {
+                        r(row.map(a => a.place));
                     });
             });
         },
