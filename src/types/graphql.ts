@@ -133,7 +133,7 @@ export type Subject = {
 export type SubjectMajor = {
   __typename?: 'SubjectMajor';
   is_main: Scalars['Boolean']['output'];
-  isu_name?: Maybe<Scalars['String']['output']>;
+  isu_name: Scalars['String']['output'];
 };
 
 export enum SubjectProcess {
@@ -295,7 +295,7 @@ export type SubjectResolvers<ContextType = any, ParentType extends ResolversPare
 
 export type SubjectMajorResolvers<ContextType = any, ParentType extends ResolversParentTypes['SubjectMajor'] = ResolversParentTypes['SubjectMajor']> = {
   is_main?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  isu_name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  isu_name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
