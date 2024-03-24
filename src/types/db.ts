@@ -33,7 +33,7 @@ interface SubjectDB {
 }
 
 interface SubjectLectureRoomTimeDB {
-    place: string,
+    place: string | null,
     day: string,
     time_start: string,
     time_end: string,
