@@ -25,29 +25,30 @@ interface SubjectDB {
 
     majors: string[],
     multi_majors: string[],
-    time_place: TimePlaceDB_Subject[],
+    time_place: SubjectLectureRoomTimeDB[],
 
     majors_raw: string,
     multi_majors_raw: string,
     time_place_raw: string,
 }
 
-interface TimePlaceDB_Subject {
+interface SubjectLectureRoomTimeDB {
     place: string,
     day: string,
     time_start: string,
     time_end: string,
 }
 
-interface TimePlaceDB {
-    year: number,
-    semester: string,
-    code: string,
+interface LectureRoomTimeTableDB {
+    place: string;
+    value: ({
+        code: string,
+        day: string,
+        time_start: string,
+        time_end: string
+    })[],
 
-    place: string,
-    day: string,
-    time_start: string,
-    time_end: string
+    value_raw: string,
 }
 
 interface SubjectMajorDB {
@@ -66,4 +67,4 @@ interface CreditDB {
     credit: number,
 }
 
-export type {SubjectDB, TimePlaceDB, SubjectMajorDB, SubjectMultiMajorDB, TimePlaceDB_Subject, CreditDB};
+export type {SubjectDB, LectureRoomTimeTableDB, SubjectMajorDB, SubjectMultiMajorDB, SubjectLectureRoomTimeDB, CreditDB};

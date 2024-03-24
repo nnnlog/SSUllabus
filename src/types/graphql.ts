@@ -42,6 +42,20 @@ export enum Language {
   Unknown = 'UNKNOWN'
 }
 
+export type LectureRoomTimeTable = {
+  __typename?: 'LectureRoomTimeTable';
+  code: Scalars['String']['output'];
+  day: Scalars['String']['output'];
+  time_end: Scalars['String']['output'];
+  time_start: Scalars['String']['output'];
+};
+
+export type LectureRoomTimeTableGroup = {
+  __typename?: 'LectureRoomTimeTableGroup';
+  place: Scalars['String']['output'];
+  value: Array<LectureRoomTimeTable>;
+};
+
 export type MultiMajor = {
   __typename?: 'MultiMajor';
   department: Scalars['String']['output'];
@@ -53,6 +67,7 @@ export type MultiMajor = {
 export type Query = {
   __typename?: 'Query';
   credits: Array<Scalars['Float']['output']>;
+  lecture_room_timetable: Array<LectureRoomTimeTableGroup>;
   major_lists: Array<SubjectMajor>;
   multi_major_lists: Array<MultiMajor>;
   subject: Array<Subject>;
@@ -60,6 +75,13 @@ export type Query = {
 
 
 export type QueryCreditsArgs = {
+  semester: Semester;
+  year: Scalars['Int']['input'];
+};
+
+
+export type QueryLecture_Room_TimetableArgs = {
+  place: Array<Scalars['String']['input']>;
   semester: Semester;
   year: Scalars['Int']['input'];
 };
@@ -126,8 +148,16 @@ export type Subject = {
   semester: Semester;
   syllabus?: Maybe<Scalars['String']['output']>;
   target?: Maybe<Scalars['String']['output']>;
-  time_place?: Maybe<Array<TimePlaceDb_Subject>>;
+  time_place?: Maybe<Array<SubjectLectureRoomTime>>;
   year: Scalars['Int']['output'];
+};
+
+export type SubjectLectureRoomTime = {
+  __typename?: 'SubjectLectureRoomTime';
+  day: Scalars['String']['output'];
+  place: Scalars['String']['output'];
+  time_end: Scalars['String']['output'];
+  time_start: Scalars['String']['output'];
 };
 
 export type SubjectMajor = {
@@ -142,14 +172,6 @@ export enum SubjectProcess {
   Suksa = 'SUKSA',
   Unknown = 'UNKNOWN'
 }
-
-export type TimePlaceDb_Subject = {
-  __typename?: 'TimePlaceDB_Subject';
-  day?: Maybe<Scalars['String']['output']>;
-  place?: Maybe<Scalars['String']['output']>;
-  time_end?: Maybe<Scalars['String']['output']>;
-  time_start?: Maybe<Scalars['String']['output']>;
-};
 
 
 
@@ -229,14 +251,16 @@ export type ResolversTypes = {
   Int: ResolverTypeWrapper<Scalars['Int']['output']>;
   IntSectionQuery: IntSectionQuery;
   Language: Language;
+  LectureRoomTimeTable: ResolverTypeWrapper<LectureRoomTimeTable>;
+  LectureRoomTimeTableGroup: ResolverTypeWrapper<LectureRoomTimeTableGroup>;
   MultiMajor: ResolverTypeWrapper<MultiMajor>;
   Query: ResolverTypeWrapper<{}>;
   Semester: Semester;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
   Subject: ResolverTypeWrapper<Subject>;
+  SubjectLectureRoomTime: ResolverTypeWrapper<SubjectLectureRoomTime>;
   SubjectMajor: ResolverTypeWrapper<SubjectMajor>;
   SubjectProcess: SubjectProcess;
-  TimePlaceDB_Subject: ResolverTypeWrapper<TimePlaceDb_Subject>;
 };
 
 /** Mapping between all available schema types and the resolvers parents */
@@ -245,12 +269,28 @@ export type ResolversParentTypes = {
   Float: Scalars['Float']['output'];
   Int: Scalars['Int']['output'];
   IntSectionQuery: IntSectionQuery;
+  LectureRoomTimeTable: LectureRoomTimeTable;
+  LectureRoomTimeTableGroup: LectureRoomTimeTableGroup;
   MultiMajor: MultiMajor;
   Query: {};
   String: Scalars['String']['output'];
   Subject: Subject;
+  SubjectLectureRoomTime: SubjectLectureRoomTime;
   SubjectMajor: SubjectMajor;
-  TimePlaceDB_Subject: TimePlaceDb_Subject;
+};
+
+export type LectureRoomTimeTableResolvers<ContextType = any, ParentType extends ResolversParentTypes['LectureRoomTimeTable'] = ResolversParentTypes['LectureRoomTimeTable']> = {
+  code?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  day?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  time_end?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  time_start?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type LectureRoomTimeTableGroupResolvers<ContextType = any, ParentType extends ResolversParentTypes['LectureRoomTimeTableGroup'] = ResolversParentTypes['LectureRoomTimeTableGroup']> = {
+  place?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  value?: Resolver<Array<ResolversTypes['LectureRoomTimeTable']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type MultiMajorResolvers<ContextType = any, ParentType extends ResolversParentTypes['MultiMajor'] = ResolversParentTypes['MultiMajor']> = {
@@ -263,6 +303,7 @@ export type MultiMajorResolvers<ContextType = any, ParentType extends ResolversP
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   credits?: Resolver<Array<ResolversTypes['Float']>, ParentType, ContextType, RequireFields<QueryCreditsArgs, 'semester' | 'year'>>;
+  lecture_room_timetable?: Resolver<Array<ResolversTypes['LectureRoomTimeTableGroup']>, ParentType, ContextType, RequireFields<QueryLecture_Room_TimetableArgs, 'place' | 'semester' | 'year'>>;
   major_lists?: Resolver<Array<ResolversTypes['SubjectMajor']>, ParentType, ContextType, RequireFields<QueryMajor_ListsArgs, 'semester' | 'year'>>;
   multi_major_lists?: Resolver<Array<ResolversTypes['MultiMajor']>, ParentType, ContextType, RequireFields<QueryMulti_Major_ListsArgs, 'semester' | 'year'>>;
   subject?: Resolver<Array<ResolversTypes['Subject']>, ParentType, ContextType, RequireFields<QuerySubjectArgs, 'semester' | 'year'>>;
@@ -288,8 +329,16 @@ export type SubjectResolvers<ContextType = any, ParentType extends ResolversPare
   semester?: Resolver<ResolversTypes['Semester'], ParentType, ContextType>;
   syllabus?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   target?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  time_place?: Resolver<Maybe<Array<ResolversTypes['TimePlaceDB_Subject']>>, ParentType, ContextType>;
+  time_place?: Resolver<Maybe<Array<ResolversTypes['SubjectLectureRoomTime']>>, ParentType, ContextType>;
   year?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type SubjectLectureRoomTimeResolvers<ContextType = any, ParentType extends ResolversParentTypes['SubjectLectureRoomTime'] = ResolversParentTypes['SubjectLectureRoomTime']> = {
+  day?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  place?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  time_end?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  time_start?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -299,19 +348,13 @@ export type SubjectMajorResolvers<ContextType = any, ParentType extends Resolver
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type TimePlaceDb_SubjectResolvers<ContextType = any, ParentType extends ResolversParentTypes['TimePlaceDB_Subject'] = ResolversParentTypes['TimePlaceDB_Subject']> = {
-  day?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  place?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  time_end?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  time_start?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
 export type Resolvers<ContextType = any> = {
+  LectureRoomTimeTable?: LectureRoomTimeTableResolvers<ContextType>;
+  LectureRoomTimeTableGroup?: LectureRoomTimeTableGroupResolvers<ContextType>;
   MultiMajor?: MultiMajorResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   Subject?: SubjectResolvers<ContextType>;
+  SubjectLectureRoomTime?: SubjectLectureRoomTimeResolvers<ContextType>;
   SubjectMajor?: SubjectMajorResolvers<ContextType>;
-  TimePlaceDB_Subject?: TimePlaceDb_SubjectResolvers<ContextType>;
 };
 

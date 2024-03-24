@@ -1,8 +1,8 @@
 import {Database} from "sqlite3";
 import {RootResolver} from "@hono/graphql-server";
 import {Context} from "hono";
-import {CreditDB, SubjectDB, SubjectMajorDB, SubjectMultiMajorDB, TimePlaceDB_Subject} from "../types/db";
-import {QueryCreditsArgs, QueryMajor_ListsArgs, QueryMulti_Major_ListsArgs, QuerySubjectArgs} from "../types/graphql";
+import {CreditDB, SubjectDB, SubjectMajorDB, SubjectMultiMajorDB, LectureRoomTimeTableDB, SubjectLectureRoomTimeDB} from "../types/db";
+import {QueryCreditsArgs, QueryLecture_Room_TimetableArgs, QueryMajor_ListsArgs, QueryMulti_Major_ListsArgs, QuerySubjectArgs} from "../types/graphql";
 
 import {buildBoolean, buildInt, buildIntRange, buildQuery, buildString, buildStringIncluded} from "./buildQuery";
 
@@ -82,7 +82,7 @@ export default (db: Database): RootResolver => (ctx?: Context) => {
                         for (let obj of row) {
                             obj.majors = (JSON.parse(obj.majors_raw) as (string | null)[]).filter(a => a !== null) as string[];
                             obj.multi_majors = (JSON.parse(obj.multi_majors_raw) as (string | null)[]).filter(a => a !== null) as string[];
-                            obj.time_place = (JSON.parse(obj.time_place_raw) as (TimePlaceDB_Subject)[]).filter(a => a.place !== null) as TimePlaceDB_Subject[]; // raw field can be nullable.
+                            obj.time_place = (JSON.parse(obj.time_place_raw) as (SubjectLectureRoomTimeDB)[]).filter(a => a.place !== null) as SubjectLectureRoomTimeDB[]; // raw field can be nullable.
                         }
 
                         r(row);
@@ -143,6 +143,35 @@ export default (db: Database): RootResolver => (ctx?: Context) => {
                     ([queryInfos].map<any[][]>(a => a.map(b => b[1]).flat())).flat(),
                     (err, row: CreditDB[]) => {
                         r(row.map(({credit}) => credit));
+                    });
+            });
+        },
+        lecture_room_timetable: async (a: QueryLecture_Room_TimetableArgs) => {
+            let queryInfos: ([string, any[]])[] = [];
+
+            queryInfos.push(["(time_place.year == (?))", [a.year]]);
+            queryInfos.push(["(time_place.semester == (?))", [a.semester]]);
+            queryInfos.push(buildString("time_place.place", a.place));
+
+            return await new Promise(r => {
+                db.all(`
+                            select time_place.place, json_group_array(json_object(
+                                    'code',
+                                    time_place.code,
+                                    'day',
+                                    time_place.day,
+                                    'time_start',
+                                    time_place.time_start,
+                                    'time_end',
+                                    time_place.time_end
+                                                    )) as value_raw
+                            from time_place
+                            where ${buildQuery(queryInfos)}
+                            group by time_place.place;
+                    `,
+                    ([queryInfos].map<any[][]>(a => a.map(b => b[1]).flat())).flat(),
+                    (err, row: LectureRoomTimeTableDB[]) => {
+                        r(row.map(a => ({...a, value: JSON.parse(a.value_raw)})));
                     });
             });
         },
