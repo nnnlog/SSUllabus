@@ -162,7 +162,7 @@ export type Subject = {
 export type SubjectLectureRoomTime = {
   __typename?: 'SubjectLectureRoomTime';
   day: Scalars['String']['output'];
-  place: Scalars['String']['output'];
+  place?: Maybe<Scalars['String']['output']>;
   time_end: Scalars['String']['output'];
   time_start: Scalars['String']['output'];
 };
@@ -344,7 +344,7 @@ export type SubjectResolvers<ContextType = any, ParentType extends ResolversPare
 
 export type SubjectLectureRoomTimeResolvers<ContextType = any, ParentType extends ResolversParentTypes['SubjectLectureRoomTime'] = ResolversParentTypes['SubjectLectureRoomTime']> = {
   day?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  place?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  place?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   time_end?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   time_start?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
