@@ -112,6 +112,7 @@ export type QuerySubjectArgs = {
   credit?: InputMaybe<Array<Scalars['Float']['input']>>;
   grade_rule?: InputMaybe<Array<GradeRule>>;
   grade_scale?: InputMaybe<Array<GradeScale>>;
+  is_capstone?: InputMaybe<Scalars['Boolean']['input']>;
   is_el?: InputMaybe<Scalars['Boolean']['input']>;
   keyword?: InputMaybe<Array<Scalars['String']['input']>>;
   lang?: InputMaybe<Array<Language>>;
@@ -141,6 +142,7 @@ export type Subject = {
   credit: Scalars['Float']['output'];
   grade_rule: GradeRule;
   grade_scale: GradeScale;
+  is_capstone: Scalars['Boolean']['output'];
   is_el: Scalars['Boolean']['output'];
   lang: Language;
   limited_target: Scalars['Boolean']['output'];
@@ -323,6 +325,7 @@ export type SubjectResolvers<ContextType = any, ParentType extends ResolversPare
   credit?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
   grade_rule?: Resolver<ResolversTypes['GradeRule'], ParentType, ContextType>;
   grade_scale?: Resolver<ResolversTypes['GradeScale'], ParentType, ContextType>;
+  is_capstone?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   is_el?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   lang?: Resolver<ResolversTypes['Language'], ParentType, ContextType>;
   limited_target?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;

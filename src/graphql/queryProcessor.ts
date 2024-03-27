@@ -19,6 +19,7 @@ export default (db: Database): RootResolver => (ctx?: Context) => {
             subjectQueryInfos.push(buildString("subject.lang", a.lang));
 
             subjectQueryInfos.push(buildBoolean("subject.is_el", a.is_el));
+            subjectQueryInfos.push(buildBoolean("subject.is_capstone", a.is_capstone));
             subjectQueryInfos.push(buildBoolean("subject.limited_target", a.limited_target));
 
             subjectQueryInfos.push(buildStringIncluded(["subject.code", "subject.name", "subject.professor"], a.keyword)); // not exact search
