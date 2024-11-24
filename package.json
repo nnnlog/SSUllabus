@@ -1,7 +1,7 @@
 {
   "scripts": {
     "dev": "tsx watch src/index.ts",
-    "build": "cd static && npm ci && npm run build && cd .. && tsc && copyfiles static/dist dist/ -r && cd src && copyfiles ./**/*.graphql ../dist/ && cd ..",
+    "build": "cd static && pnpm i && pnpm run build && cd .. && tsc && copyfiles static/dist dist/ -r && cd src && copyfiles ./**/*.graphql ../dist/ && cd ..",
     "codegen": "graphql-codegen --config ./codegen.ts"
   },
   "dependencies": {
