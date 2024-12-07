@@ -21,6 +21,7 @@
     "@types/node": "^20.11.17",
     "copyfiles": "^2.4.1",
     "tsx": "^3.12.2",
-    "typescript": "^5.4.3"
+    "typescript": "^5.4.3",
+    "graphql": "^16.9.0"
   }
 }
