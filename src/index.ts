@@ -10,12 +10,20 @@ import query from "./graphql/queryProcessor";
 import {serveStatic} from "@hono/node-server/serve-static";
 
 import "dotenv/config";
+import { rateLimitMiddleware } from './rateLimit';
+import { concurrencyLimitMiddleware } from './concurrencyLimit';
 
 const db = new (Database)(`${__dirname}/../subjects.db`, OPEN_READONLY , () => {});
 
 const app = new Hono();
 
 app.use(cors());
+
+app.use("/graphql", rateLimitMiddleware());
+
+const concurrencyLimit = parseInt(process.env.CONCURRENCY_LIMIT ?? "3");
+app.use("/graphql", concurrencyLimitMiddleware(concurrencyLimit));
+
 app.use("/graphql", graphqlServer({
   schema,
   rootResolver: query(db),

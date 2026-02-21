@@ -1,0 +1,8 @@
+node_modules
+dist
+.git
+.idea
+.gitignore
+*.md
+static/node_modules
+static/dist

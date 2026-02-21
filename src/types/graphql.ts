@@ -190,7 +190,7 @@ export type ResolverTypeWrapper<T> = Promise<T> | T;
 export type ResolverWithResolve<TResult, TParent, TContext, TArgs> = {
   resolve: ResolverFn<TResult, TParent, TContext, TArgs>;
 };
-export type Resolver<TResult, TParent = {}, TContext = {}, TArgs = {}> = ResolverFn<TResult, TParent, TContext, TArgs> | ResolverWithResolve<TResult, TParent, TContext, TArgs>;
+export type Resolver<TResult, TParent = Record<PropertyKey, never>, TContext = Record<PropertyKey, never>, TArgs = Record<PropertyKey, never>> = ResolverFn<TResult, TParent, TContext, TArgs> | ResolverWithResolve<TResult, TParent, TContext, TArgs>;
 
 export type ResolverFn<TResult, TParent, TContext, TArgs> = (
   parent: TParent,
@@ -227,27 +227,29 @@ export type SubscriptionObject<TResult, TKey extends string, TParent, TContext, 
   | SubscriptionSubscriberObject<TResult, TKey, TParent, TContext, TArgs>
   | SubscriptionResolverObject<TResult, TParent, TContext, TArgs>;
 
-export type SubscriptionResolver<TResult, TKey extends string, TParent = {}, TContext = {}, TArgs = {}> =
+export type SubscriptionResolver<TResult, TKey extends string, TParent = Record<PropertyKey, never>, TContext = Record<PropertyKey, never>, TArgs = Record<PropertyKey, never>> =
   | ((...args: any[]) => SubscriptionObject<TResult, TKey, TParent, TContext, TArgs>)
   | SubscriptionObject<TResult, TKey, TParent, TContext, TArgs>;
 
-export type TypeResolveFn<TTypes, TParent = {}, TContext = {}> = (
+export type TypeResolveFn<TTypes, TParent = Record<PropertyKey, never>, TContext = Record<PropertyKey, never>> = (
   parent: TParent,
   context: TContext,
   info: GraphQLResolveInfo
 ) => Maybe<TTypes> | Promise<Maybe<TTypes>>;
 
-export type IsTypeOfResolverFn<T = {}, TContext = {}> = (obj: T, context: TContext, info: GraphQLResolveInfo) => boolean | Promise<boolean>;
+export type IsTypeOfResolverFn<T = Record<PropertyKey, never>, TContext = Record<PropertyKey, never>> = (obj: T, context: TContext, info: GraphQLResolveInfo) => boolean | Promise<boolean>;
 
 export type NextResolverFn<T> = () => Promise<T>;
 
-export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs = {}> = (
+export type DirectiveResolverFn<TResult = Record<PropertyKey, never>, TParent = Record<PropertyKey, never>, TContext = Record<PropertyKey, never>, TArgs = Record<PropertyKey, never>> = (
   next: NextResolverFn<TResult>,
   parent: TParent,
   args: TArgs,
   context: TContext,
   info: GraphQLResolveInfo
 ) => TResult | Promise<TResult>;
+
+
 
 
 
@@ -263,7 +265,7 @@ export type ResolversTypes = {
   LectureRoomTimeTable: ResolverTypeWrapper<LectureRoomTimeTable>;
   LectureRoomTimeTableGroup: ResolverTypeWrapper<LectureRoomTimeTableGroup>;
   MultiMajor: ResolverTypeWrapper<MultiMajor>;
-  Query: ResolverTypeWrapper<{}>;
+  Query: ResolverTypeWrapper<Record<PropertyKey, never>>;
   Semester: Semester;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
   Subject: ResolverTypeWrapper<Subject>;
@@ -281,7 +283,7 @@ export type ResolversParentTypes = {
   LectureRoomTimeTable: LectureRoomTimeTable;
   LectureRoomTimeTableGroup: LectureRoomTimeTableGroup;
   MultiMajor: MultiMajor;
-  Query: {};
+  Query: Record<PropertyKey, never>;
   String: Scalars['String']['output'];
   Subject: Subject;
   SubjectLectureRoomTime: SubjectLectureRoomTime;
@@ -293,13 +295,11 @@ export type LectureRoomTimeTableResolvers<ContextType = any, ParentType extends 
   day?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   time_end?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   time_start?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type LectureRoomTimeTableGroupResolvers<ContextType = any, ParentType extends ResolversParentTypes['LectureRoomTimeTableGroup'] = ResolversParentTypes['LectureRoomTimeTableGroup']> = {
   place?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   value?: Resolver<Array<ResolversTypes['LectureRoomTimeTable']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type MultiMajorResolvers<ContextType = any, ParentType extends ResolversParentTypes['MultiMajor'] = ResolversParentTypes['MultiMajor']> = {
@@ -307,7 +307,6 @@ export type MultiMajorResolvers<ContextType = any, ParentType extends ResolversP
   detail_department?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   isu_name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   univ?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
@@ -342,7 +341,6 @@ export type SubjectResolvers<ContextType = any, ParentType extends ResolversPare
   target?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   time_place?: Resolver<Maybe<Array<ResolversTypes['SubjectLectureRoomTime']>>, ParentType, ContextType>;
   year?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type SubjectLectureRoomTimeResolvers<ContextType = any, ParentType extends ResolversParentTypes['SubjectLectureRoomTime'] = ResolversParentTypes['SubjectLectureRoomTime']> = {
@@ -350,13 +348,11 @@ export type SubjectLectureRoomTimeResolvers<ContextType = any, ParentType extend
   place?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   time_end?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   time_start?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type SubjectMajorResolvers<ContextType = any, ParentType extends ResolversParentTypes['SubjectMajor'] = ResolversParentTypes['SubjectMajor']> = {
   is_main?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   isu_name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type Resolvers<ContextType = any> = {
